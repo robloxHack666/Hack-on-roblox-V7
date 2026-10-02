@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation des 3 Étapes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .step-item {
+            background-color: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.completed {
+            border-color: #2ecc71;
+            background-color: #eafaf1;
+        }
+
+        .step-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .step-link:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .completed .status-badge {
+            background-color: #2ecc71;
+        }
+
+        .btn-submit {
+            background-color: #bdc3c7;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: not-allowed;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit.active {
+            background-color: #2ecc71;
+            cursor: pointer;
+        }
+
+        .btn-submit.active:hover {
+            background-color: #27ae60;
+        }
+
+        .success-message {
+            display: none;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Mission : Visiter les 3 sites</h1>
+    <p>Cliquez sur chaque lien ci-dessous pour valider les étapes.</p>
+
+    <ul class="step-list">
+        <!-- Étape 1 : Amazon -->
+        <li class="step-item" id="step1">
+            <a class="step-link" href="https://www.amazon.fr/" target="_blank" onclick="completeStep(1)">
+                Étape 1 : Visiter Amazon
+            </a>
+            <span class="status-badge" id="badge1">À faire</span>
+        </li>
+
+        <!-- Étape 2 : Temu -->
+        <li class="step-item" id="step2">
+            <a class="step-link" href="https://www.temu.com/?_x_ns_irclickid=TYVQ5bT%3AhxyZU8PSX03uwyEBUkrwERwtG0N%3AWA0&_x_ads_account=18350&_x_ads_id=1580294&_x_ns_iradname=Online%20Tracking%20Link&_x_ns_iradsize=&_x_ns_prodsku=&_x_ns_irmptype=mediapartner&_x_ns_sharedid=firefox&_x_ns_ts=1790966857693&_x_ns_randint=7727504&_x_ns_adtype=ONLINE_TRACKING_LINK&_p_rfs=1&irgwc=1&afsrc=1&_x_ns_irmpgroupname=%22Admarketplace%22%2C%22ld%22&_x_ads_channel=impact&_x_ns_mp_value2=&_x_ns_mp_value3=&_x_ns_irmpname=Firefox%20Browser%20-%20adMarketplace&_x_ns_irpid=2626476&_bg_fs=1&_p_jump_id=1202&_x_vst_scene=adg&scene=adg_alliance_exp&_p_adg_gwid=7e038eb9d0d04aa3b7fb66501673c488" target="_blank" onclick="completeStep(2)">
+                Étape 2 : Visiter Temu
+            </a>
+            <span class="status-badge" id="badge2">À faire</span>
+        </li>
+
+        <!-- Étape 3 : LeBonCoin -->
+        <li class="step-item" id="step3">
+            <a class="step-link" href="https://www.leboncoin.fr/" target="_blank" onclick="completeStep(3)">
+                Étape 3 : Visiter LeBonCoin
+            </a>
+            <span class="status-badge" id="badge3">À faire</span>
+        </li>
+    </ul>
+
+    <!-- Bouton de validation finale renommé en START -->
+    <button id="submitBtn" class="btn-submit" disabled onclick="finishMission()">START</button>
+    
+    <div id="successMsg" class="success-message">Redirection vers Roblox en cours... 🚀</div>
+</div>
+
+<script>
+    // Tableau pour suivre l'état de validation des 3 étapes
+    let steps = {
+        1: false,
+        2: false,
+        3: false
+    };
+
+    function completeStep(stepNumber) {
+        // Marquer l'étape comme complétée
+        steps[stepNumber] = true;
+
+        // Mettre à jour l'affichage visuel (CSS et texte)
+        const item = document.getElementById('step' + stepNumber);
+        const badge = document.getElementById('badge' + stepNumber);
+        
+        item.classList.add('completed');
+        badge.innerText = 'Validé ✓';
+
+        // Vérifier si toutes les étapes sont terminées
+        checkAllSteps();
+    }
+
+    function checkAllSteps() {
+        const btn = document.getElementById('submitBtn');
+        
+        // Si les 3 étapes sont à 'true'
+        if (steps[1] && steps[2] && steps[3]) {
+            btn.removeAttribute('disabled');
+            btn.classList.add('active');
+        }
+    }
+
+    function finishMission() {
+        // Affiche le message de chargement et masque le bouton
+        document.getElementById('successMsg').style.display = 'block';
+        document.getElementById('submitBtn').style.display = 'none';
+
+        // Redirige immédiatement vers roblox.com
+        window.location.href = "https://roblox.com";
+    }
+</script>
+
+</body>
+</html>
